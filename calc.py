@@ -20,6 +20,7 @@ def load_meshviewer_json(url):
 
     return res.json()['nodes']
 
+
 def load_nodes_json(url):
     res = requests.get(url)
 
@@ -34,7 +35,6 @@ def load_nodes_json(url):
         out.append({"model": model})
 
     return out
-
 
 
 def get_device_information(model_information, device):
@@ -74,26 +74,36 @@ def gather_information(model_information, nodes):
     return sorted(output_list, key=lambda k: k['total'], reverse=True)
 
 
-def print_information(community_information):
+def print_information(community_information, print_output=True):
     total_loss = 0
+    data = {'models': {}, 'loss': 0}
 
     for model in community_information:
         if model["total"] == -1:
             continue
 
         total_loss += model["total"]
+        data['models'][model["model"]] = {'count': model["count"], 'loss': model["total"]}
 
-        print("{model} - Device count: {count} - Loss: {total_loss}€".format(model=model["model"],
-                                                                                  count=model["count"],
-                                                                                  total_loss=model["total"]))
+        if print_output:
+            print("{model} - Device count: {count} - Loss: {total_loss}€".format(
+                model=model["model"],
+                count=model["count"],
+                total_loss=model["total"]
+            ))
 
-    print("Total loss:  {loss}€".format(loss=total_loss))
+    if print_output:
+        print("Total loss:  {loss}€".format(loss=total_loss))
+    else:
+        data['loss'] = total_loss
+        print(json.dumps(data))
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Calculate net-worth of a Freifunk community')
     parser.add_argument('--meshviewer-json', help='meshviewer.json URL', action="append")
     parser.add_argument('--nodes-json', help='nodes.json URL', action="append")
+    parser.add_argument('--output-json', help='Stats as JSON', action='store_true')
     args = parser.parse_args()
 
     model_information = load_devices_json(os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -109,4 +119,4 @@ if __name__ == '__main__':
         exit(1)
     community_information = gather_information(model_information, meshviewer_json)
 
-    print_information(community_information)
+    print_information(community_information, not args.output_json)
