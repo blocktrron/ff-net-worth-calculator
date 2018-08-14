@@ -92,16 +92,19 @@ def print_information(community_information):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Calculate net-worth of a Freifunk community')
-    parser.add_argument('--meshviewer-json', help='meshviewer.json URL')
-    parser.add_argument('--nodes-json', help='nodes.json URL')
+    parser.add_argument('--meshviewer-json', help='meshviewer.json URL', action="append")
+    parser.add_argument('--nodes-json', help='nodes.json URL', action="append")
     args = parser.parse_args()
 
     model_information = load_devices_json(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                                        "devices.json"))
+    meshviewer_json = []
     if args.meshviewer_json is not None:
-        meshviewer_json = load_meshviewer_json(args.meshviewer_json)
+        for url in args.meshviewer_json:
+            meshviewer_json += load_meshviewer_json(url)
     elif args.nodes_json is not None:
-        meshviewer_json = load_nodes_json(args.nodes_json)
+        for url in args.nodes_json:
+            meshviewer_json += load_nodes_json(url)
     else:
         exit(1)
     community_information = gather_information(model_information, meshviewer_json)
