@@ -1,3 +1,4 @@
+#! /usr/bin/env python3
 import argparse
 import json
 import os
@@ -18,6 +19,22 @@ def load_meshviewer_json(url):
         return None
 
     return res.json()['nodes']
+
+def load_nodes_json(url):
+    res = requests.get(url)
+
+    if res.status_code is not 200:
+        return None
+
+    out = []
+    for n in res.json()['nodes']:
+        model = n.get("nodeinfo", {}).get("hardware", {}).get("model", None)
+        if model is None:
+            continue
+        out.append({"model": model})
+
+    return out
+
 
 
 def get_device_information(model_information, device):
@@ -75,12 +92,18 @@ def print_information(community_information):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Calculate net-worth of a Freifunk community')
-    parser.add_argument('meshviewer_json_url', metavar='URL', type=str, nargs=1, help='meshviewer.json URL')
+    parser.add_argument('--meshviewer-json', help='meshviewer.json URL')
+    parser.add_argument('--nodes-json', help='nodes.json URL')
     args = parser.parse_args()
 
     model_information = load_devices_json(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                                        "devices.json"))
-    meshviewer_json = load_meshviewer_json(args.meshviewer_json_url[0])
+    if args.meshviewer_json is not None:
+        meshviewer_json = load_meshviewer_json(args.meshviewer_json)
+    elif args.nodes_json is not None:
+        meshviewer_json = load_nodes_json(args.nodes_json)
+    else:
+        exit(1)
     community_information = gather_information(model_information, meshviewer_json)
 
     print_information(community_information)
