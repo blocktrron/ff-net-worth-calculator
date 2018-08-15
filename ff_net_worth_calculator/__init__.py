@@ -1,12 +1,18 @@
 import json
 import os
 import requests
+import sys
 
 _ROOT = os.path.abspath(os.path.dirname(__file__))
+_timeout = 0.1
 
 
 def get_data_path(path):
     return os.path.join(_ROOT, 'data', path)
+
+
+def error(message):
+    print(message, file=sys.stderr)
 
 
 def load_devices_json(path='devices.json'):
@@ -16,22 +22,50 @@ def load_devices_json(path='devices.json'):
 
 
 def load_meshviewer_json(url):
-    res = requests.get(url)
+    try:
+        res = requests.get(url, timeout=_timeout)
+    except:
+        error("error while fetching " + url)
+        return []
 
     if res.status_code is not 200:
-        return None
+        error("status_code (load_meshviewer_json) " + str(res.status_code))
+        return []
 
-    return res.json()['nodes']
+    data = res.json()
+
+    if 'updated_at' not in data and 'timestamp' not in data:
+        error("no updated_at")
+        # this is not a valid nodelist.json file
+        return []
+
+    return data['nodes']
 
 
 def load_nodes_json(url):
-    res = requests.get(url)
+    try:
+        res = requests.get(url, timeout=_timeout)
+    except:
+        error("error while fetching " + url)
+        return []
 
     if res.status_code is not 200:
-        return None
+        error("status_code (load_nodes_json) " + str(res.status_code))
+        return []
+
+    data = res.json()
+
+    if 'timestamp' not in data:
+        # this is not a valid nodes.json file
+        return []
+
+    if data['version'] != 2:
+        # v1 not supported
+        return []
 
     out = []
-    for n in res.json()['nodes']:
+    for n in data['nodes']:
+        error(n.get("nodeinfo", {}).get("hardware", None))
         model = n.get("nodeinfo", {}).get("hardware", {}).get("model", None)
         if model is None:
             continue
