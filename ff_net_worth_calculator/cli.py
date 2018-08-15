@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import argparse
 from ff_net_worth_calculator import *
 
@@ -29,7 +27,7 @@ def print_information(community_information, print_output=True):
         print(json.dumps(data))
 
 
-if __name__ == '__main__':
+def run():
     parser = argparse.ArgumentParser(description='Calculate net-worth of a Freifunk community')
     parser.add_argument('--meshviewer-json', help='meshviewer.json URL', action="append")
     parser.add_argument('--nodes-json', help='nodes.json URL', action="append")
