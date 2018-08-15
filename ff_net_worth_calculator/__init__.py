@@ -109,28 +109,3 @@ def gather_information(model_information, nodes):
                     "total": model_data[model]["total"]} for model in model_data.keys()]
 
     return sorted(output_list, key=lambda k: k['total'], reverse=True)
-
-
-def print_information(community_information, print_output=True):
-    total_loss = 0
-    data = {'models': {}, 'loss': 0}
-
-    for model in community_information:
-        if model["total"] == -1:
-            continue
-
-        total_loss += model["total"]
-        data['models'][model["model"]] = {'count': model["count"], 'loss': model["total"]}
-
-        if print_output:
-            print("{model} - Device count: {count} - Loss: {total_loss}€".format(
-                model=model["model"],
-                count=model["count"],
-                total_loss=model["total"]
-            ))
-
-    if print_output:
-        print("Total loss:  {loss}€".format(loss=total_loss))
-    else:
-        data['loss'] = total_loss
-        print(json.dumps(data))

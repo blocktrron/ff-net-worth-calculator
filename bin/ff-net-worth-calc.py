@@ -3,6 +3,32 @@
 import argparse
 from ff_net_worth_calculator import *
 
+
+def print_information(community_information, print_output=True):
+    total_loss = 0
+    data = {'models': {}, 'loss': 0}
+
+    for model in community_information:
+        if model["total"] == -1:
+            continue
+
+        total_loss += model["total"]
+        data['models'][model["model"]] = {'count': model["count"], 'loss': model["total"]}
+
+        if print_output:
+            print("{model} - Device count: {count} - Loss: {total_loss}€".format(
+                model=model["model"],
+                count=model["count"],
+                total_loss=model["total"]
+            ))
+
+    if print_output:
+        print("Total loss:  {loss}€".format(loss=total_loss))
+    else:
+        data['loss'] = total_loss
+        print(json.dumps(data))
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Calculate net-worth of a Freifunk community')
     parser.add_argument('--meshviewer-json', help='meshviewer.json URL', action="append")
