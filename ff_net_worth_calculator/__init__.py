@@ -4,7 +4,7 @@ import requests
 import sys
 
 _ROOT = os.path.abspath(os.path.dirname(__file__))
-_timeout = 0.1
+_timeout = 1
 
 
 def get_data_path(path):
