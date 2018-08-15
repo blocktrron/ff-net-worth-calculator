@@ -29,6 +29,7 @@ def print_information(community_information, print_output=True):
 
 def run():
     parser = argparse.ArgumentParser(description='Calculate net-worth of a Freifunk community')
+    parser.add_argument('--alfred-json', help='alfred.json URL', action="append")
     parser.add_argument('--meshviewer-json', help='meshviewer.json URL', action="append")
     parser.add_argument('--nodes-json', help='nodes.json URL', action="append")
     parser.add_argument('--output-json', help='Stats as JSON', action='store_true')
@@ -41,6 +42,9 @@ def run():
     elif args.nodes_json is not None:
         for url in args.nodes_json:
             meshviewer_json += load_nodes_json(url)
+    elif args.alfred_json is not None:
+        for url in args.alfred_json:
+            meshviewer_json += load_alfred_json(url)
     else:
         parser.print_help()
         exit(1)
