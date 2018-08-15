@@ -12,7 +12,6 @@ setup(
     license='AGPLv3',
     packages=find_packages(),
     install_requires=['requests'],
-    scripts=['bin/ff-net-worth-calc.py'],
     package_data={'ff_net_worth_calculator': ['data/*']},
     zip_safe=False,
 )
