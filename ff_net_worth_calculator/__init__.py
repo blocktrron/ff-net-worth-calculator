@@ -59,12 +59,10 @@ def load_nodes_json(url):
         # this is not a valid nodes.json file
         return []
 
-    if data['version'] != 2:
-        # v1 not supported
-        return []
-
     out = []
     for n in data['nodes']:
+        if type(n) is str:
+            continue
         error(n.get("nodeinfo", {}).get("hardware", None))
         model = n.get("nodeinfo", {}).get("hardware", {}).get("model", None)
         if model is None:
