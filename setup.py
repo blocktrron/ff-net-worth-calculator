@@ -9,7 +9,7 @@ setup(
     url='https://github.com/blocktrron/ff-net-worth-calculator',
     author='blocktrron',
     author_email='mail@david-bauer.net',
-    license='MIT',
+    license='AGPLv3',
     packages=find_packages(),
     install_requires=['requests'],
     scripts=['bin/ff-net-worth-calc.py'],
