@@ -104,6 +104,10 @@ def load_alfred_json(url):
 
     data = res.json()
 
+    if 'timestamp' in data or 'version' in data:
+        # this is not a valid alfred.json file
+        return []
+
     out = []
     for key in data:
         n = data[key]
