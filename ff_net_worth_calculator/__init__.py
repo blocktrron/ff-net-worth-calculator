@@ -81,7 +81,7 @@ def load_nodes_json(url):
 
     data = res.json()
 
-    if 'timestamp' not in data:
+    if 'timestamp' not in data or 'version' not in data:
         # this is not a valid nodes.json file
         return []
 
