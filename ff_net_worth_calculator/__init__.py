@@ -120,6 +120,29 @@ def load_alfred_json(url):
     return out
 
 
+def load_franken(url):
+    try:
+        res = requests.get(url, timeout=_timeout)
+    except:
+        error("error while fetching " + url)
+        return []
+
+    if res.status_code is not 200:
+        error("status_code (load_nodes_json) " + str(res.status_code))
+        return []
+
+    data = res.json()
+
+    out = []
+    for node in data["nodes"]:
+        model = node.get("hardware", None)
+        if model is None:
+            continue
+        out.append({"model": model})
+
+    return out
+
+
 def get_device_information(model_information, device):
     for dev in model_information:
         if dev["name"] in device:

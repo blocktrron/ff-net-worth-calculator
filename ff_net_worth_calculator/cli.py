@@ -32,6 +32,7 @@ def run():
     parser.add_argument('--alfred-json', help='alfred.json URL', action="append")
     parser.add_argument('--meshviewer-json', help='meshviewer.json URL', action="append")
     parser.add_argument('--nodes-json', help='nodes.json URL', action="append")
+    parser.add_argument('--franken', help='Franken URL', action="append")
     parser.add_argument('--output-json', help='Stats as JSON', action='store_true')
     args = parser.parse_args()
 
@@ -45,6 +46,9 @@ def run():
     elif args.alfred_json is not None:
         for url in args.alfred_json:
             meshviewer_json += load_alfred_json(url)
+    elif args.franken is not None:
+        for url in args.franken:
+            meshviewer_json += load_franken(url)
     else:
         parser.print_help()
         exit(1)
