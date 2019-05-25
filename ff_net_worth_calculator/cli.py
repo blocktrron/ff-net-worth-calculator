@@ -34,12 +34,13 @@ def run():
     parser.add_argument('--nodes-json', help='nodes.json URL', action="append")
     parser.add_argument('--franken', help='Franken URL', action="append")
     parser.add_argument('--output-json', help='Stats as JSON', action='store_true')
+    parser.add_argument('--exclude-domain', help='Domains to exclude for calculation', action="append")
     args = parser.parse_args()
 
     meshviewer_json = []
     if args.meshviewer_json is not None:
         for url in args.meshviewer_json:
-            meshviewer_json += load_meshviewer_json(url)
+            meshviewer_json += load_meshviewer_json(url, args.exclude_domain or None)
     elif args.nodes_json is not None:
         for url in args.nodes_json:
             meshviewer_json += load_nodes_json(url)

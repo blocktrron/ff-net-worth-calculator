@@ -21,7 +21,10 @@ def load_devices_json(path='devices.json'):
         return json.loads(devices)
 
 
-def load_meshviewer_json(url):
+def load_meshviewer_json(url, domains_to_exclude=None):
+    if domains_to_exclude is None:
+        domains_to_exclude = []
+
     try:
         res = requests.get(url, timeout=_timeout)
     except:
@@ -39,7 +42,7 @@ def load_meshviewer_json(url):
         # this is not a valid nodelist.json file
         return []
 
-    return data['nodes']
+    return list(filter(lambda n: n["domain"] not in domains_to_exclude, data['nodes']))
 
 
 def load_nodes_json_v1(data):
