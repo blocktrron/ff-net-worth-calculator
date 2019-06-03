@@ -42,7 +42,11 @@ def load_meshviewer_json(url, domains_to_exclude=None):
         # this is not a valid nodelist.json file
         return []
 
-    return list(filter(lambda n: n["domain"] not in domains_to_exclude, data['nodes']))
+    return list(filter(
+        lambda n:
+        "domain" not in n or n["domain"] not in domains_to_exclude,
+        data['nodes']
+    ))
 
 
 def load_nodes_json_v1(data):
