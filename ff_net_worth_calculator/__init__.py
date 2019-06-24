@@ -14,6 +14,14 @@ SCHEMA_MESHVIEWER = Schema({
     'links': [dict]
 })
 
+SCHEMA_MESHVIEWER_OLD = Schema({
+    'meta': {
+        'timestamp': str
+    },
+    'nodes': [dict],
+    'links': [dict]
+})
+
 SCHEMA_NODESJSONV1 = Schema({
     'timestamp': str,
     'version': 1,
@@ -129,6 +137,7 @@ def parse_franken_extended_routerlist(data, *kwargs):
 
 
 register_hook('meshviewer', SCHEMA_MESHVIEWER, parse_meshviewer)
+register_hook('meshviewer (old)', SCHEMA_MESHVIEWER_OLD, parse_meshviewer)
 register_hook('nodes.json v1', SCHEMA_NODESJSONV1, parse_nodes_json_v1)
 register_hook('nodes.json v2', SCHEMA_NODESJSONV2, parse_nodes_json_v2)
 register_hook('alfred', SCHEMA_ALFRED, parse_alfred)
