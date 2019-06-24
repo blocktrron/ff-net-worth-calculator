@@ -4,7 +4,7 @@ import requests
 import requests.exceptions
 import sys
 
-from voluptuous import Schema, Invalid
+from voluptuous import Schema, Invalid, MultipleInvalid
 
 
 # minimal schema definitions to recognize formats
@@ -31,12 +31,12 @@ def validate_macaddr(candidate):
     blocks = candidate.split(':')
 
     if len(blocks) != 6:
-        raise Invalid
+        raise Invalid("Not a valid mac address")
 
     try:
         int(''.join(blocks), 16)
     except ValueError:
-        raise Invalid
+        raise Invalid("Not a valid mac address")
 
     return candidate
 
@@ -163,7 +163,7 @@ def load(url, ignore_domains=None):
         try:
             format['schema'](data)
             return format['parser'](data, ignore_domains)
-        except Invalid as ex:
+        except (Invalid, MultipleInvalid) as ex:
             pass
 
     return None
