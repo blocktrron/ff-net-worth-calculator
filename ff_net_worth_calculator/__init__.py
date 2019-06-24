@@ -166,7 +166,11 @@ def load(url, ignore_domains=None):
     if not response:
         return None
 
-    data = response.json()
+    try:
+        data = response.json()
+    except ValueError as ex:
+        error(f"Exception caught whilee processing {url}\n{ex}")
+        return None
 
     for name, format in FORMATS.items():
         try:
