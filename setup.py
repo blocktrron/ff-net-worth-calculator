@@ -11,7 +11,7 @@ setup(
     author_email='mail@david-bauer.net',
     license='AGPLv3',
     packages=find_packages(),
-    install_requires=['requests'],
+    install_requires=['requests', 'voluptuous'],
     package_data={'ff_net_worth_calculator': ['data/*']},
     zip_safe=False,
 )
