@@ -17,6 +17,7 @@
   {"name": "TP-Link TL-WA830", "price": 25, "legacy": true},
   {"name": "TP-Link TL-WA850", "price": 30, "legacy": true},
   {"name": "TP-Link TL-WA860", "price": 30, "legacy": true},
+  {"name": "TP-Link TL-WR841N/ND Mod", "price": 17, "legacy": false},
   {"name": "TP-Link TL-WR841", "price": 15, "legacy": true},
   {"name": "TP-Link TL-WR843", "price": 20, "legacy": true},
   {"name": "TP-Link TL-WR842N/ND v1", "price": 25, "legacy": true},
